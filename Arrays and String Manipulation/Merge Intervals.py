@@ -20,3 +20,11 @@ def merge_meetings(meetings):
             result.append(currStart, currEnd)
 
     return result
+
+
+# Complexity
+# O(nlogn) time
+# Sorting the meetings takes up nlogn time, if the meetings were already sorted, this would be O(n) time
+# O(n) space - worst case scenario, none of the meetings merge and a new list the same size as the input is created
+
+# Greedy approach - builds up a solution by choosing the option that looks the best
