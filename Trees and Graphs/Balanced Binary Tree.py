@@ -7,23 +7,39 @@
 #         self.val = val
 #         self.left = left
 #         self.right = right
-class Solution:
-    def isBalancedHelper(self, root: TreeNode) -> bool:
 
-        # Empty Tree is Balanced and has height -1
-        if not root:
-            return True, -1
 
-        # Check Subtrees to see if they are balanced
-        leftIsBalanced, leftHeight = self.isBalancedHelper(root.left)
-        if not leftIsBalanced:
-            return False, 0
-        rightIsBalanced, rightHeight = self.isBalancedHelper(root.right)
-        if not rightIsBalanced:
-            return False, 0
+def isBalanced(root):
 
-        # If the subtrees are balanced, check if the current tree is balanced using their height
-        return (abs(leftHeight - rightHeight) < 2), 1 + max(leftHeight, rightHeight)
+    # Tree with No Nodes is Superbalanced
+    if root is None:
+        return True
 
-    def isBalanced(self, root: TreeNode) -> bool:
-        return self.isBalancedHelper(root)[0]
+    # Short Circuit if 2 or more are found
+    depths = []
+
+    # List treated as a stack that will store tuples of (node, depth)
+    nodes = []
+    nodes.append((root, 0))
+
+    while len(nodes):
+
+        # Pop node and its depth from the top of our stack
+        node, depth = nodes.pop()
+
+        # Case: Leaf Found
+        if (not node.left) and (not node.right):
+            if depth not in depths:
+                depths.append(depth)
+
+                # 2 Cases:
+                # 1. more than 2 different leaf depths
+                # 2. 2 leaf depths that are more than 1 apart
+                if ((len(depths) > 2) or (len(depths) == 2 and abs(depths[0] - depths[1]) > 1)):
+                    return False
+        else:
+            # Not a leaf - keep stepping down
+            if node.left:
+                nodes.append((node.left, depth + 1))
+            if node.right:
+                nodes.append((node.right, depth + 1))
